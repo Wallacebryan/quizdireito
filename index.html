@@ -2,28 +2,84 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meu Site</title>
+  <title>Quiz - Aula de Psicologia</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 50px;
-      background-color: #f2f2f2;
-      color: #333;
-    }
-
-    h1 {
-      color: #0066cc;
-    }
-
-    p {
-      font-size: 18px;
-    }
+    body { font-family: Arial; background: #f9f9f9; text-align: center; padding: 20px; }
+    .quiz-container { background: white; padding: 20px; border-radius: 10px; max-width: 600px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    button { padding: 10px 20px; margin: 10px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background-color: #ddd; }
+    .popup { display: none; position: fixed; top: 20px; right: 20px; background: #444; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; z-index: 10; }
   </style>
 </head>
 <body>
-  <h1>Bem-vindo ao meu site!</h1>
-  <p>Essa é minha primeira página publicada na web.</p>
+
+<div class="quiz-container">
+  <h2>Pergunta 1: Qual é o objetivo da psicologia segundo o material?</h2>
+  <button onclick="responder(this, false)">A) Estudar apenas o comportamento físico</button><br>
+  <button onclick="responder(this, true)">B) Trabalhar com a realidade psíquica do indivíduo</button><br>
+  <button onclick="responder(this, false)">C) Corrigir erros cerebrais com medicação</button>
+  
+  <div id="pergunta2" style="display:none;">
+    <h2>Pergunta 2: O que é sensação?</h2>
+    <button onclick="responder(this, true)">A) Entrada de informações externas ou internas no cérebro</button><br>
+    <button onclick="responder(this, false)">B) A interpretação emocional do estímulo</button><br>
+    <button onclick="responder(this, false)">C) Uma reação muscular do corpo</button>
+  </div>
+
+  <div id="pergunta3" style="display:none;">
+    <h2>Pergunta 3: O que influencia a atenção?</h2>
+    <button onclick="responder(this, false)">A) Apenas estímulos visuais</button><br>
+    <button onclick="responder(this, false)">B) O tamanho do cérebro</button><br>
+    <button onclick="responder(this, true)">C) Emoções, experiências e interesses</button>
+  </div>
+
+  <h3 id="mensagem"></h3>
+</div>
+
+<div class="popup" id="popupPorcentagem"></div>
+
+<script>
+  let acertos = 0;
+  let perguntaAtual = 1;
+
+  function responder(botao, correto) {
+    if (botao.disabled) return;
+    
+    if (correto) {
+      botao.style.backgroundColor = "#a6e6a6";
+      botao.textContent += " ✅ Correto!";
+      acertos++;
+    } else {
+      botao.style.backgroundColor = "#e6a6a6";
+      botao.textContent += " ❌ Errado!";
+    }
+
+    desativarBotoes(botao.parentNode);
+
+    setTimeout(() => {
+      document.getElementById("pergunta" + (perguntaAtual + 1))?.style.display = "block";
+      perguntaAtual++;
+
+      if (perguntaAtual > 3) {
+        mostrarPorcentagem();
+      }
+    }, 1000);
+  }
+
+  function desativarBotoes(container) {
+    const botoes = container.querySelectorAll("button");
+    botoes.forEach(btn => btn.disabled = true);
+  }
+
+  function mostrarPorcentagem() {
+    const porcentagem = Math.round((acertos / 3) * 100);
+    const popup = document.getElementById("popupPorcentagem");
+    popup.textContent = `Seu aproveitamento foi de ${porcentagem}% 🎯`;
+    popup.style.display = "block";
+
+    setTimeout(() => { popup.style.display = "none"; }, 5000);
+  }
+</script>
+
 </body>
 </html>
